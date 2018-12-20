@@ -6,7 +6,7 @@ from datetime import datetime
 from os.path import basename, isdir, join as path_join, splitext
 from time import sleep
 from tempfile import mkstemp
-from typing import Any, Callable, Dict, Optional, TextIO
+from typing import Any, BinaryIO, Callable, Dict, Optional
 import json
 import os
 import re
@@ -31,7 +31,7 @@ def _default_on_message(percent: float,
                         fr_cnt: int,
                         total_frames: int,
                         elapsed: float):
-    bar = list('[' + (20 * ' ') + ']')
+    bar = list('|' + (20 * ' ') + '|')
     to_fill = int(round((fr_cnt / total_frames) * 20)) or 1
     for x in range(1, to_fill):
         bar[x] = '░'
@@ -45,7 +45,7 @@ def _default_on_message(percent: float,
 
 
 def _display(total_frames: int,
-             vstats_handle: TextIO,
+             vstats_handle: BinaryIO,
              on_message: Optional[OnMessageCallback] = None,
              wait_time: int = 1):
     start = datetime.now()
@@ -123,6 +123,7 @@ def start(infile: str,
     if total_frames <= 0:
         raise ValueError('Unexpected total frames value')
 
+    prefix = 'ffprog-{}'.format(splitext(basename(infile))[0])
     vstats_fd, vstats_path = mkstemp(suffix='.vstats', prefix=prefix)
     pid = ffmpeg_func(infile, outfile, vstats_path)
     sleep(wait_time)
@@ -149,7 +150,8 @@ def _main():
     try:
         prefix = splitext(basename(sys.argv[1]))[0]
     except IndexError:
-        print('Usage: {} INFILE [FFMPEG OUTPUT ARGS]', file=sys.stderr)
+        print('Usage: {} INFILE [FFMPEG OUTPUT ARGS]'.format(sys.argv[0]),
+              file=sys.stderr)
         return 1
     outfile = '{}.mp4'.format(prefix)
     try:
