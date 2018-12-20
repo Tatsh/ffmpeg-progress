@@ -2,7 +2,7 @@ from setuptools import setup
 
 
 setup(name='ffmpeg-progress',
-      version='0.0.1',
+      version='0.0.2',
       author='Andrew Udvare',
       author_email='audvare@gmail.com',
       url='https://github.com/Tatsh/ffmpeg-progress',
