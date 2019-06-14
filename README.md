@@ -24,7 +24,7 @@ def on_message_handler(percent: float,
                        fr_cnt: int,
                        total_frames: int,
                        elapsed: float):
-    sys.stdout.write('\r{:.2f%}'.format(percent))
+    sys.stdout.write('\r{:.2f}%'.format(percent))
     sys.stdout.flush()
 
 
