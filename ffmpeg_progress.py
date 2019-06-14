@@ -117,7 +117,7 @@ def start(infile: str,
         raise ValueError('Cannot use input FPS')
     if fps == 0:
         raise ValueError('Unexpected zero FPS')
-    dur = float(probe['streams'][index]['duration'])
+    dur = float(probe['format']['duration'])
     total_frames = int(dur * fps)
 
     if total_frames <= 0:
