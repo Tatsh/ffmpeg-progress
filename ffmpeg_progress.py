@@ -3,7 +3,7 @@ This is based on ffmpeg-progress.sh by Rupert Plumridge
 https://gist.github.com/pruperting/397509/1068d4ced44ded986d0f52ddb4253cfee40921a7
 """
 from datetime import datetime
-from os.path import basename, isdir, join as path_join, splitext
+from os.path import basename, splitext
 from time import sleep
 from tempfile import mkstemp
 from typing import Any, BinaryIO, Callable, Dict, Optional
@@ -18,29 +18,27 @@ OnMessageCallback = Callable[[float, int, int, float], None]
 
 def ffprobe(infile: str) -> Dict[str, Any]:
     """ffprobe front-end."""
-    proc = sp.run(['ffprobe',
-                   '-v', 'quiet',
-                   '-print_format', 'json',
-                   '-show_format',
-                   '-show_streams',
-                   infile], encoding='utf-8', stdout=sp.PIPE)
+    proc = sp.run([
+        'ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format',
+        '-show_streams', infile
+    ],
+                  encoding='utf-8',
+                  stdout=sp.PIPE)
     return json.loads(proc.stdout)
 
 
-def _default_on_message(percent: float,
-                        fr_cnt: int,
-                        total_frames: int,
+def _default_on_message(percent: float, fr_cnt: int, total_frames: int,
                         elapsed: float):
     bar = list('|' + (20 * ' ') + '|')
     to_fill = int(round((fr_cnt / total_frames) * 20)) or 1
     for x in range(1, to_fill):
         bar[x] = '░'
     bar[to_fill] = '░'
-    bar = ''.join(bar)
+    s_bar = ''.join(bar)
 
     sys.stdout.write('\r{}  {:5.1f}%   {:d} / {:d} frames;   '
                      'elapsed time: {:.2f} seconds'.format(
-                        bar, percent, fr_cnt, total_frames, elapsed))
+                         s_bar, percent, fr_cnt, total_frames, elapsed))
     sys.stdout.flush()
 
 
@@ -49,7 +47,8 @@ def _display(total_frames: int,
              on_message: Optional[OnMessageCallback] = None,
              wait_time: int = 1):
     start = datetime.now()
-    fr_cnt = eta = elapsed = percent = 0
+    fr_cnt = 0
+    elapsed = percent = 0.0
     if not on_message:
         on_message = _default_on_message
 
@@ -125,14 +124,11 @@ def start(infile: str,
 
     prefix = 'ffprog-{}'.format(splitext(basename(infile))[0])
     vstats_fd, vstats_path = mkstemp(suffix='.vstats', prefix=prefix)
-    pid = ffmpeg_func(infile, outfile, vstats_path)
+    ffmpeg_func(infile, outfile, vstats_path)
     sleep(wait_time)
 
     with open(vstats_fd, 'rb') as f:
-        _display(total_frames,
-                 f,
-                 wait_time=wait_time,
-                 on_message=on_message)
+        _display(total_frames, f, wait_time=wait_time, on_message=on_message)
 
     if on_done:
         on_done()
@@ -140,11 +136,11 @@ def start(infile: str,
 
 def _main():
     def ffmpeg(infile: str, outfile: str, vstats_path: str):
-        p = sp.Popen(['ffmpeg',
-                      '-y',
-                      '-vstats_file', vstats_path,
-                      '-i', infile] + sys.argv[2:] + [
-                      outfile], stdout=sp.PIPE, stderr=sp.PIPE)
+        p = sp.Popen(
+            ['ffmpeg', '-y', '-vstats_file', vstats_path, '-i', infile] +
+            sys.argv[2:] + [outfile],
+            stdout=sp.PIPE,
+            stderr=sp.PIPE)
         return p.pid
 
     try:
