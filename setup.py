@@ -1,6 +1,5 @@
 from setuptools import setup
 
-
 setup(name='ffmpeg-progress',
       version='0.0.3',
       author='Andrew Udvare',
@@ -12,13 +11,13 @@ setup(name='ffmpeg-progress',
       long_description=open('README.md').read(),
       long_description_content_type='text/markdown',
       classifiers=[
-        'Development Status :: 4 - Beta',
-        'Environment :: Console',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3 :: Only',
-        'Topic :: Multimedia :: Sound/Audio',
-        'Topic :: Multimedia :: Sound/Audio :: Conversion',
-        'Topic :: Multimedia :: Video',
-        'Topic :: Multimedia :: Video :: Conversion',
-        'Topic :: Utilities',
+          'Development Status :: 4 - Beta',
+          'Environment :: Console',
+          'License :: OSI Approved :: MIT License',
+          'Programming Language :: Python :: 3 :: Only',
+          'Topic :: Multimedia :: Sound/Audio',
+          'Topic :: Multimedia :: Sound/Audio :: Conversion',
+          'Topic :: Multimedia :: Video',
+          'Topic :: Multimedia :: Video :: Conversion',
+          'Topic :: Utilities',
       ])
