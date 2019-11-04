@@ -21,43 +21,44 @@ linesep_bytes = os.linesep.encode('utf-8')
 
 def ffprobe(infile: str) -> Dict[str, Any]:
     """ffprobe front-end."""
-    proc = sp.run([
-        'ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format',
-        '-show_streams', infile
-    ],
-                  encoding='utf-8',
-                  stdout=sp.PIPE)
-    return json.loads(proc.stdout)
+    return json.loads(
+        sp.check_output([
+            'ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format',
+            '-show_streams', infile
+        ],
+                        encoding='utf-8'))
 
 
-def _default_on_message(percent: float, fr_cnt: int, total_frames: int,
-                        elapsed: float):
+def default_on_message(percent: float, fr_cnt: int, total_frames: int,
+                       elapsed: float):
     bar = list('|' + (20 * ' ') + '|')
     to_fill = int(round((fr_cnt / total_frames) * 20)) or 1
     for x in range(1, to_fill):
         bar[x] = '░'
     bar[to_fill] = '░'
     s_bar = ''.join(bar)
-
     sys.stdout.write('\r{}  {:5.1f}%   {:d} / {:d} frames;   '
                      'elapsed time: {:.2f} seconds'.format(
                          s_bar, percent, fr_cnt, total_frames, elapsed))
     sys.stdout.flush()
 
 
-def _display(total_frames: int,
-             vstats_fd: int,
-             on_message: Optional[OnMessageCallback] = None,
-             wait_time: float = 1.0):
+def display(total_frames: int,
+            vstats_fd: int,
+            pid: int,
+            on_message: Optional[OnMessageCallback] = None,
+            wait_time: float = 1.0):
     start = datetime.now()
     fr_cnt = 0
     elapsed = percent = 0.0
     if not on_message:
-        on_message = _default_on_message
-
-    while fr_cnt < total_frames:
+        on_message = default_on_message
+    while fr_cnt < total_frames and percent < 100.0:
         sleep(wait_time)
-
+        try:
+            os.kill(pid, 0)
+        except ProcessLookupError:
+            break
         try:
             pos_end = os.lseek(vstats_fd, -2, os.SEEK_END)
         except OSError:
@@ -75,14 +76,13 @@ def _display(total_frames: int,
         if vstats > fr_cnt:
             fr_cnt = vstats
             percent = 100 * (fr_cnt / total_frames)
-            elapsed = (datetime.now() - start).total_seconds()
-
+        elapsed = (datetime.now() - start).total_seconds()
         on_message(percent, fr_cnt, total_frames, elapsed)
 
 
 def start(infile: str,
           outfile: str,
-          ffmpeg_func: Callable[[str, str, str], Any],
+          ffmpeg_func: Callable[[str, str, str], int],
           on_message: Optional[OnMessageCallback] = None,
           on_done: Optional[Callable[[], None]] = None,
           index: int = 0,
@@ -129,32 +129,31 @@ def start(infile: str,
         raise ValueError('Unexpected zero FPS')
     dur = float(probe['format']['duration'])
     total_frames = int(dur * fps)
-
     if total_frames <= 0:
         raise ValueError('Unexpected total frames value')
-
     prefix = 'ffprog-{}'.format(splitext(basename(infile))[0])
     vstats_fd, vstats_path = mkstemp(suffix='.vstats', prefix=prefix)
-    ffmpeg_func(infile, outfile, vstats_path)
+    pid = ffmpeg_func(infile, outfile, vstats_path)
+    if not pid:
+        raise TypeError('ffmpeg callback must return a valid PID')
     sleep(initial_wait_time)
-    _display(total_frames,
-             vstats_fd,
-             wait_time=wait_time,
-             on_message=on_message)
+    display(total_frames,
+            vstats_fd,
+            pid,
+            wait_time=wait_time,
+            on_message=on_message)
     os.close(vstats_fd)
-
     if on_done:
         on_done()
 
 
-def _main():
+def main():
     def ffmpeg(infile: str, outfile: str, vstats_path: str):
-        p = sp.Popen(
+        return sp.Popen(
             ['ffmpeg', '-y', '-vstats_file', vstats_path, '-i', infile] +
             sys.argv[2:] + [outfile],
             stdout=sp.PIPE,
-            stderr=sp.PIPE)
-        return p.pid
+            stderr=sp.PIPE).pid
 
     try:
         prefix = splitext(basename(sys.argv[1]))[0]
@@ -172,4 +171,4 @@ def _main():
 
 
 if __name__ == '__main__':
-    sys.exit(_main())
+    sys.exit(main())
