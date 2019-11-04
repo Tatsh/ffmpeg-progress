@@ -13,6 +13,8 @@ import re
 import subprocess as sp
 import sys
 
+__all__ = ['ffprobe', 'start']
+
 OnMessageCallback = Callable[[float, int, int, float], None]
 
 
