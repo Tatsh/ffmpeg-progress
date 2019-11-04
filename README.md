@@ -12,12 +12,11 @@ from ffmpeg_progress import start
 
 
 def ffmpeg_callback(infile: str, outfile: str, vstats_path: str):
-    p = sp.Popen(['ffmpeg',
-                  '-y',
-                  '-vstats_file', vstats_path,
-                  '-i', infile,
-                  outfile], stdout=sp.PIPE, stderr=sp.PIPE)
-    return p.pid
+    sp.Popen(['ffmpeg',
+              '-y',
+              '-vstats_file', vstats_path,
+              '-i', infile,
+              outfile], stdout=sp.PIPE, stderr=sp.PIPE)
 
 
 def on_message_handler(percent: float,
@@ -28,19 +27,15 @@ def on_message_handler(percent: float,
     sys.stdout.flush()
 
 
-def on_done_handler():
-    print('')
-
-
 start('my input file.mov',
       'some output file.mp4',
       ffmpeg_callback,
       on_message=on_message_handler,
-      on_done=on_done_handler,
+      on_done=lambda: print(''),
       wait_time=1)  # seconds
 ```
 
-`start()` is the main function to use. If `on_message` is not passed, a default function is used.
+`start()` is the main function to use. If `on_message` is not passed, a default function is used. The `on_done` argument is optional. The `initial_wait_time` keyword argument can be used to specify a time to wait before processing the log.
 
 ## ffprobe
 
