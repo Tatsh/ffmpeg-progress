@@ -16,6 +16,7 @@ import sys
 __all__ = ['ffprobe', 'start']
 
 OnMessageCallback = Callable[[float, int, int, float], None]
+linesep_bytes = os.linesep.encode('utf-8')
 
 
 def ffprobe(infile: str) -> Dict[str, Any]:
@@ -62,7 +63,7 @@ def _display(total_frames: int,
         except OSError:
             continue  # Not enough data in file
         pos_start = None
-        while os.read(vstats_fd, 1) != b'\n':
+        while os.read(vstats_fd, 1) != linesep_bytes:
             pos_start = os.lseek(vstats_fd, -2, os.SEEK_CUR)
         if pos_start is None:
             continue
@@ -161,7 +162,8 @@ def _main():
         print('Usage: {} INFILE [FFMPEG OUTPUT ARGS]'.format(sys.argv[0]),
               file=sys.stderr)
         return 1
-    outfile = '{}.mp4'.format(prefix)
+    fd, outfile = mkstemp(dir='.', prefix=prefix, suffix='.mp4')
+    os.close(fd)
     try:
         start(sys.argv[1], outfile, ffmpeg, on_done=lambda: print(''))
     except (KeyboardInterrupt, ValueError) as e:
