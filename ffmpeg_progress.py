@@ -6,7 +6,7 @@ from datetime import datetime
 from os.path import basename, splitext
 from time import sleep
 from tempfile import mkstemp
-from typing import Any, BinaryIO, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional
 import json
 import os
 import re
@@ -43,9 +43,9 @@ def _default_on_message(percent: float, fr_cnt: int, total_frames: int,
 
 
 def _display(total_frames: int,
-             vstats_handle: BinaryIO,
+             vstats_fd: int,
              on_message: Optional[OnMessageCallback] = None,
-             wait_time: int = 1):
+             wait_time: float = 1.0):
     start = datetime.now()
     fr_cnt = 0
     elapsed = percent = 0.0
@@ -55,12 +55,17 @@ def _display(total_frames: int,
     while fr_cnt < total_frames:
         sleep(wait_time)
 
-        vstats_handle.seek(-2, os.SEEK_END)
-        while vstats_handle.read(1) != b'\n':
-            vstats_handle.seek(-2, os.SEEK_CUR)
-        last = vstats_handle.readline().decode('utf-8').strip()
         try:
-            vstats = int(re.sub(r'\s+', ' ', last).split(' ')[5])
+            pos_end = os.lseek(vstats_fd, -2, os.SEEK_END)
+        except OSError:
+            continue  # Not enough data in file
+        pos_start = None
+        while os.read(vstats_fd, 1) != b'\n':
+            pos_start = os.lseek(vstats_fd, -2, os.SEEK_CUR)
+        size = pos_end - pos_start
+        last = os.read(vstats_fd, size).decode('utf-8').strip()
+        try:
+            vstats = int(re.split(r'\s+', last)[5])
         except IndexError:
             vstats = 0
         if vstats > fr_cnt:
@@ -77,7 +82,8 @@ def start(infile: str,
           on_message: Optional[OnMessageCallback] = None,
           on_done: Optional[Callable[[], None]] = None,
           index: int = 0,
-          wait_time: int = 1):
+          wait_time: float = 1.0,
+          initial_wait_time: float = 3.0):
     """
     The starting point.
 
@@ -125,10 +131,12 @@ def start(infile: str,
     prefix = 'ffprog-{}'.format(splitext(basename(infile))[0])
     vstats_fd, vstats_path = mkstemp(suffix='.vstats', prefix=prefix)
     ffmpeg_func(infile, outfile, vstats_path)
-    sleep(wait_time)
-
-    with open(vstats_fd, 'rb') as f:
-        _display(total_frames, f, wait_time=wait_time, on_message=on_message)
+    sleep(initial_wait_time)
+    _display(total_frames,
+             vstats_fd,
+             wait_time=wait_time,
+             on_message=on_message)
+    os.close(vstats_fd)
 
     if on_done:
         on_done()
