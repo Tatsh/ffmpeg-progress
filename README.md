@@ -13,10 +13,12 @@ from ffmpeg_progress import start
 
 def ffmpeg_callback(infile: str, outfile: str, vstats_path: str):
     return sp.Popen(['ffmpeg',
+                     '-nostats',
+                     '-loglevel', '0',
                      '-y',
                      '-vstats_file', vstats_path,
                      '-i', infile,
-                      outfile], stdout=sp.PIPE, stderr=sp.PIPE).pid
+                      outfile]).pid
 
 
 def on_message_handler(percent: float,
@@ -35,7 +37,9 @@ start('my input file.mov',
       wait_time=1)  # seconds
 ```
 
-`start()` is the main function to use. The ffmpeg callback _must_ return a PID (`int`). If `on_message` is not passed, a default function is used. The `on_done` argument is optional. The `initial_wait_time` keyword argument can be used to specify a time to wait before processing the log.
+`start()` is the main function to use. If `on_message` is not passed, a default function is used. The `on_done` argument is optional. The `initial_wait_time` keyword argument can be used to specify a time to wait before processing the log.
+
+The ffmpeg callback _must_ return a PID (`int`). It is recommended to pass `-nostats -loglevel 0` to your ffmpeg process. The ffmpeg callback also must pass `-vstats_file` given the path from the callback argument.
 
 ## ffprobe
 
