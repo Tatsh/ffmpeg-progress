@@ -4,8 +4,8 @@ https://gist.github.com/pruperting/397509/1068d4ced44ded986d0f52ddb4253cfee40921
 """
 from datetime import datetime
 from os.path import basename, splitext
-from time import sleep
 from tempfile import mkstemp
+from time import sleep
 from typing import Any, Callable, Dict, Optional
 import json
 import os
@@ -62,8 +62,9 @@ def _display(total_frames: int,
         pos_start = None
         while os.read(vstats_fd, 1) != b'\n':
             pos_start = os.lseek(vstats_fd, -2, os.SEEK_CUR)
-        size = pos_end - pos_start
-        last = os.read(vstats_fd, size).decode('utf-8').strip()
+        if pos_start is None:
+            continue
+        last = os.read(vstats_fd, pos_end - pos_start).decode('utf-8').strip()
         try:
             vstats = int(re.split(r'\s+', last)[5])
         except IndexError:
@@ -78,24 +79,22 @@ def _display(total_frames: int,
 
 def start(infile: str,
           outfile: str,
-          ffmpeg_func: Callable[[str, str, str], int],
+          ffmpeg_func: Callable[[str, str, str], Any],
           on_message: Optional[OnMessageCallback] = None,
           on_done: Optional[Callable[[], None]] = None,
           index: int = 0,
           wait_time: float = 1.0,
-          initial_wait_time: float = 3.0):
+          initial_wait_time: float = 2.0):
     """
     The starting point.
 
     Pass an input file path, an output file path, and a callable.
 
-    The callable (signature: (infile, outfile, vstats_file) -> int) passed in
+    The callable (signature: (infile, outfile, vstats_file) -> Any) passed in
     is expected to start the ffmpeg process and pass the given stats path to
     the process (last argument):
 
     ffmpeg -y -vstats_file ... -i ...
-
-    The callable must return the PID of the ffmpeg process.
 
     The on_message argument may be used to override the messaging, which by
     default writes to sys.stdout with basic information on the progress. It
@@ -108,6 +107,9 @@ def start(infile: str,
     The wait_time (seconds) argument may be used to slow down the number of
     messages. A higher wait time will mean fewer messages. Very small values
     may not work.
+
+    The initial_wait_time (seconds) argument may be used to set an initial
+    interval to wait before processing the log file.
 
     Only Linux is supported at this time.
     """
