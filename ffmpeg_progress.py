@@ -13,6 +13,8 @@ import re
 import subprocess as sp
 import sys
 
+import psutil
+
 __all__ = ['ffprobe', 'start']
 
 OnMessageCallback = Callable[[float, int, int, float], None]
@@ -58,6 +60,8 @@ def display(total_frames: int,
         try:
             os.kill(pid, 0)
         except ProcessLookupError:
+            break
+        if psutil.Process(pid).status() == psutil.STATUS_ZOMBIE:
             break
         try:
             pos_end = os.lseek(vstats_fd, -2, os.SEEK_END)
@@ -149,11 +153,10 @@ def start(infile: str,
 
 def main():
     def ffmpeg(infile: str, outfile: str, vstats_path: str):
-        return sp.Popen(
-            ['ffmpeg', '-y', '-vstats_file', vstats_path, '-i', infile] +
-            sys.argv[2:] + [outfile],
-            stdout=sp.PIPE,
-            stderr=sp.PIPE).pid
+        return sp.Popen([
+            'ffmpeg', '-nostats', '-loglevel', '0', '-y', '-vstats_file',
+            vstats_path, '-i', infile
+        ] + sys.argv[2:] + [outfile]).pid
 
     try:
         prefix = splitext(basename(sys.argv[1]))[0]

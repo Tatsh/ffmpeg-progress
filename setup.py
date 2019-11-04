@@ -20,4 +20,5 @@ setup(name='ffmpeg-progress',
           'Topic :: Multimedia :: Video',
           'Topic :: Multimedia :: Video :: Conversion',
           'Topic :: Utilities',
-      ])
+      ],
+      install_requires=['psutil>=5.6.3'])
