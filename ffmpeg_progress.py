@@ -6,7 +6,7 @@ from datetime import datetime
 from os.path import basename, splitext
 from tempfile import mkstemp
 from time import sleep
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, Optional, cast
 import json
 import os
 import re
@@ -18,27 +18,30 @@ import psutil
 __all__ = ['ffprobe', 'start']
 
 OnMessageCallback = Callable[[float, int, int, float], None]
-linesep_bytes = os.linesep.encode('utf-8')
+LINESEP_BYTES = os.linesep.encode('utf-8')
 
 
-def ffprobe(infile: str) -> Dict[str, Any]:
+def ffprobe(in_file: str) -> Dict[str, Any]:
     """ffprobe front-end."""
-    return json.loads(
-        sp.check_output([
-            'ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format',
-            '-show_streams', infile
-        ],
-                        encoding='utf-8'))
+    return cast(
+        Dict[str, Any],
+        json.loads(
+            sp.check_output([
+                'ffprobe', '-v', 'quiet', '-print_format', 'json',
+                '-show_format', '-show_streams', in_file
+            ],
+                            encoding='utf-8')))
 
 
 def default_on_message(percent: float, fr_cnt: int, total_frames: int,
-                       elapsed: float):
-    bar = list('|' + (20 * ' ') + '|')
+                       elapsed: float) -> None:
+    """Default callback for display()."""
+    bar_ = list('|' + (20 * ' ') + '|')
     to_fill = int(round((fr_cnt / total_frames) * 20)) or 1
     for x in range(1, to_fill):
-        bar[x] = '░'
-    bar[to_fill] = '░'
-    s_bar = ''.join(bar)
+        bar_[x] = '░'
+    bar_[to_fill] = '░'
+    s_bar = ''.join(bar_)
     sys.stdout.write('\r{}  {:5.1f}%   {:d} / {:d} frames;   '
                      'elapsed time: {:.2f} seconds'.format(
                          s_bar, percent, fr_cnt, total_frames, elapsed))
@@ -49,8 +52,12 @@ def display(total_frames: int,
             vstats_fd: int,
             pid: int,
             on_message: Optional[OnMessageCallback] = None,
-            wait_time: float = 1.0):
-    start = datetime.now()
+            wait_time: float = 1.0) -> None:
+    """
+    Generates messages for display of progress. Call on_message argument when
+    one is available.
+    """
+    start_time = datetime.now()
     fr_cnt = 0
     elapsed = percent = 0.0
     if not on_message:
@@ -68,7 +75,7 @@ def display(total_frames: int,
         except OSError:
             continue  # Not enough data in file
         pos_start = None
-        while os.read(vstats_fd, 1) != linesep_bytes:
+        while os.read(vstats_fd, 1) != LINESEP_BYTES:
             pos_start = os.lseek(vstats_fd, -2, os.SEEK_CUR)
         if pos_start is None:
             continue
@@ -80,24 +87,24 @@ def display(total_frames: int,
         if vstats > fr_cnt:
             fr_cnt = vstats
             percent = 100 * (fr_cnt / total_frames)
-        elapsed = (datetime.now() - start).total_seconds()
+        elapsed = (datetime.now() - start_time).total_seconds()
         on_message(percent, fr_cnt, total_frames, elapsed)
 
 
-def start(infile: str,
+def start(in_file: str,
           outfile: str,
           ffmpeg_func: Callable[[str, str, str], int],
           on_message: Optional[OnMessageCallback] = None,
           on_done: Optional[Callable[[], None]] = None,
           index: int = 0,
           wait_time: float = 1.0,
-          initial_wait_time: float = 2.0):
+          initial_wait_time: float = 2.0) -> None:
     """
     The starting point.
 
     Pass an input file path, an output file path, and a callable.
 
-    The callable (signature: (infile, outfile, vstats_file) -> Any) passed in
+    The callable (signature: (in_file, outfile, vstats_file) -> Any) passed in
     is expected to start the ffmpeg process and pass the given stats path to
     the process (last argument):
 
@@ -120,13 +127,13 @@ def start(infile: str,
 
     Only Linux is supported at this time.
     """
-    probe = ffprobe(infile)
+    probe = ffprobe(in_file)
     try:
         probe['streams'][index]
     except (IndexError, KeyError):
         raise ValueError('Probe failed')
     try:
-        fps = eval(probe['streams'][index]['avg_frame_rate'])
+        fps = eval(probe['streams'][index]['avg_frame_rate'])  # pylint: disable=eval-used
     except ZeroDivisionError:
         raise ValueError('Cannot use input FPS')
     if fps == 0:
@@ -135,9 +142,9 @@ def start(infile: str,
     total_frames = int(dur * fps)
     if total_frames <= 0:
         raise ValueError('Unexpected total frames value')
-    prefix = 'ffprog-{}'.format(splitext(basename(infile))[0])
+    prefix = 'ffprog-{}'.format(splitext(basename(in_file))[0])
     vstats_fd, vstats_path = mkstemp(suffix='.vstats', prefix=prefix)
-    pid = ffmpeg_func(infile, outfile, vstats_path)
+    pid = ffmpeg_func(in_file, outfile, vstats_path)
     if not pid:
         raise TypeError('ffmpeg callback must return a valid PID')
     sleep(initial_wait_time)
@@ -151,26 +158,28 @@ def start(infile: str,
         on_done()
 
 
-def main():
-    def ffmpeg(infile: str, outfile: str, vstats_path: str):
+def main() -> int:
+    """Entry point for shell use."""
+    def ffmpeg(in_file: str, outfile: str, vstats_path: str) -> int:
         return sp.Popen([
             'ffmpeg', '-nostats', '-loglevel', '0', '-y', '-vstats_file',
-            vstats_path, '-i', infile
+            vstats_path, '-i', in_file
         ] + sys.argv[2:] + [outfile]).pid
 
     try:
-        prefix = splitext(basename(sys.argv[1]))[0]
+        prefix, ext = splitext(basename(sys.argv[1]))
     except IndexError:
-        print('Usage: {} INFILE [FFMPEG OUTPUT ARGS]'.format(sys.argv[0]),
+        print('Usage: {} IN_FILE [FFMPEG ARGS]'.format(sys.argv[0]),
               file=sys.stderr)
         return 1
-    fd, outfile = mkstemp(dir='.', prefix=prefix, suffix='.mp4')
+    fd, outfile = mkstemp(dir='.', prefix=prefix, suffix=ext)
     os.close(fd)
     try:
         start(sys.argv[1], outfile, ffmpeg, on_done=lambda: print(''))
     except (KeyboardInterrupt, ValueError) as e:
-        print(e, file=sys.stderr)
+        print(str(e), file=sys.stderr)
         return 1
+    return 0
 
 
 if __name__ == '__main__':
