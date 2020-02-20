@@ -34,11 +34,12 @@ class ProbeFormatDict(TypedDict):
     duration: float
 
 
-ProbeDict = TypedDict('ProbeDict', {
-    'format': ProbeFormatDict,
-    'streams': Sequence[ProbeStreamDict]
-},
-                      total=False)
+ProbeDict = TypedDict(  # pylint: disable=invalid-name
+    'ProbeDict', {
+        'format': ProbeFormatDict,
+        'streams': Sequence[ProbeStreamDict]
+    },
+    total=False)
 
 
 def ffprobe(in_file: str) -> ProbeDict:
