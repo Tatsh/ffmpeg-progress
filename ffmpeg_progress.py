@@ -6,30 +6,48 @@ from datetime import datetime
 from os.path import basename, splitext
 from tempfile import mkstemp
 from time import sleep
-from typing import Any, Callable, Dict, Optional, cast
+from typing import Callable, Optional, Sequence, cast
 import json
 import os
 import re
 import subprocess as sp
 import sys
 
+from typing_extensions import TypedDict
 import psutil
 
-__all__ = ['ffprobe', 'start']
+__all__ = (
+    'ffprobe',
+    'start',
+    'OnMessageCallback',
+)
 
 OnMessageCallback = Callable[[float, int, int, float], None]
 LINESEP_BYTES = os.linesep.encode('utf-8')
 
 
-def ffprobe(in_file: str) -> Dict[str, Any]:
+class ProbeStreamDict(TypedDict):
+    avg_frame_rate: str
+
+
+class ProbeFormatDict(TypedDict):
+    duration: float
+
+
+ProbeDict = TypedDict('ProbeDict', {
+    'format': ProbeFormatDict,
+    'streams': Sequence[ProbeStreamDict]
+},
+                      total=False)
+
+
+def ffprobe(in_file: str) -> ProbeDict:
     """ffprobe front-end."""
     return cast(
-        Dict[str, Any],
+        ProbeDict,
         json.loads(
-            sp.check_output([
-                'ffprobe', '-v', 'quiet', '-print_format', 'json',
-                '-show_format', '-show_streams', in_file
-            ],
+            sp.check_output(('ffprobe', '-v', 'quiet', '-print_format', 'json',
+                             '-show_format', '-show_streams', in_file),
                             encoding='utf-8')))
 
 
@@ -133,7 +151,7 @@ def start(in_file: str,
     except (IndexError, KeyError):
         raise ValueError('Probe failed')
     try:
-        fps = eval(probe['streams'][index]['avg_frame_rate'])  # pylint: disable=eval-used
+        fps = cast(float, eval(probe['streams'][index]['avg_frame_rate']))  # pylint: disable=eval-used
     except ZeroDivisionError:
         raise ValueError('Cannot use input FPS')
     if fps == 0:
