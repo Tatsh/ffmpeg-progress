@@ -17,9 +17,9 @@ from typing_extensions import TypedDict
 import psutil
 
 __all__ = (
+    'OnMessageCallback',
     'ffprobe',
     'start',
-    'OnMessageCallback',
 )
 
 OnMessageCallback = Callable[[float, int, int, float], None]
@@ -34,12 +34,9 @@ class ProbeFormatDict(TypedDict):
     duration: float
 
 
-ProbeDict = TypedDict(  # pylint: disable=invalid-name
-    'ProbeDict', {
-        'format': ProbeFormatDict,
-        'streams': Sequence[ProbeStreamDict]
-    },
-    total=False)
+class ProbeDict(TypedDict, total=False):
+    format: ProbeFormatDict
+    streams: Sequence[ProbeStreamDict]
 
 
 def ffprobe(in_file: str) -> ProbeDict:
@@ -149,12 +146,12 @@ def start(in_file: str,
     probe = ffprobe(in_file)
     try:
         probe['streams'][index]
-    except (IndexError, KeyError):
-        raise ValueError('Probe failed')
+    except (IndexError, KeyError) as e:
+        raise ValueError('Probe failed') from e
     try:
         fps = cast(float, eval(probe['streams'][index]['avg_frame_rate']))  # pylint: disable=eval-used
-    except ZeroDivisionError:
-        raise ValueError('Cannot use input FPS')
+    except ZeroDivisionError as e:
+        raise ValueError('Cannot use input FPS') from e
     if fps == 0:
         raise ValueError('Unexpected zero FPS')
     dur = float(probe['format']['duration'])
@@ -188,8 +185,7 @@ def main() -> int:
     try:
         prefix, ext = splitext(basename(sys.argv[1]))
     except IndexError:
-        print('Usage: {} IN_FILE [FFMPEG ARGS]'.format(sys.argv[0]),
-              file=sys.stderr)
+        print(f'Usage: {sys.argv[0]} IN_FILE [FFMPEG ARGS]', file=sys.stderr)
         return 1
     fd, outfile = mkstemp(dir='.', prefix=prefix, suffix=ext)
     os.close(fd)
