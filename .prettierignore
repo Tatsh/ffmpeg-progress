@@ -1,0 +1,7 @@
+*.lock
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+/docs/_build/
+/htmlcov/
+/man/
