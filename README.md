@@ -1,6 +1,23 @@
 # ffmpeg-progress
 
+[![QA](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/qa.yml/badge.svg)](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/qa.yml)
+[![Tests](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/tests.yml/badge.svg)](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/tests.yml)
+[![Coverage Status](https://coveralls.io/repos/github/Tatsh/ffmpeg-progress/badge.svg?branch=master)](https://coveralls.io/github/Tatsh/ffmpeg-progress?branch=master)
+[![Documentation Status](https://readthedocs.org/projects/ffmpeg-progress/badge/?version=latest)](https://ffmpeg-progress.readthedocs.io/en/latest/?badge=latest)
+![PyPI - Version](https://img.shields.io/pypi/v/ffmpeg-progress)
+![GitHub tag (with filter)](https://img.shields.io/github/v/tag/Tatsh/ffmpeg-progress)
+![GitHub](https://img.shields.io/github/license/Tatsh/ffmpeg-progress)
+![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/Tatsh/ffmpeg-progress/v0.0.1/master)
+
+Get progress information for an ffmpeg process.
+
 This script is based on the work of [Rupert Plumridge](https://gist.github.com/pruperting/397509/1068d4ced44ded986d0f52ddb4253cfee40921a7).
+
+## Installation
+
+```shell
+pip install ffmpeg-progress
+```
 
 ## Basic use
 
@@ -37,9 +54,13 @@ start('my input file.mov',
       wait_time=1)  # seconds
 ```
 
-`start()` is the main function to use. If `on_message` is not passed, a default function is used. The `on_done` argument is optional. The `initial_wait_time` keyword argument can be used to specify a time to wait before processing the log.
+`start()` is the main function to use. If `on_message` is not passed, a default function is used.
+The `on_done` argument is optional. The `initial_wait_time` keyword argument can be used to specify
+a time to wait before processing the log.
 
-The ffmpeg callback _must_ return a PID (`int`). It is recommended to pass `-nostats -loglevel 0` to your ffmpeg process. The ffmpeg callback also must pass `-vstats_file` given the path from the callback argument.
+The ffmpeg callback _must_ return a PID (`int`). It is recommended to pass `-nostats -loglevel 0`
+to your ffmpeg process. The ffmpeg callback also must pass `-vstats_file` given the path from the
+callback argument.
 
 ## ffprobe
 
