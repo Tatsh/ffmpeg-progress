@@ -33,7 +33,7 @@ python = ">=3.10,<4"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-commitizen = "^3.13.0"
+commitizen = ">=3.13,<5.0"
 mypy = "^1.8.0"
 rope = "^1.12.0"
 ruff = ">=0.5.0,<0.9.0"
