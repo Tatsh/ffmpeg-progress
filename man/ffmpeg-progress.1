@@ -1,0 +1,229 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "FFMPEG-PROGRESS" "1" "Apr 16, 2025" "0.0.4" "ffmpeg-progress"
+.SH NAME
+ffmpeg-progress \- ffmpeg-progress v0.0.4
+.SH COMMANDS
+.SS ffmpeg\-progress
+.sp
+Entry point for shell use.
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+ffmpeg\-progress [OPTIONS] FILENAME
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Arguments
+.INDENT 0.0
+.TP
+.B FILENAME
+Required argument
+.UNINDENT
+.SH LIBRARY
+.INDENT 0.0
+.TP
+.B ffmpeg_progress.lib.ffprobe(\fI\%in_file\fP: \X'tty: link https://docs.python.org/3/library/pathlib.html#pathlib.Path'\fI\%Path\fP\X'tty: link' | \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link') -> \fI\%ProbeDict\fP
+Ffprobe front\-end.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.TP
+.B in_file : \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link'
+Input file.
+.UNINDENT
+.TP
+.B Returns
+Dictionary.
+.TP
+.B Return type
+\fI\%ProbeDict\fP
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B ffmpeg_progress.lib.start(\fI\%in_file\fP: \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link' | \X'tty: link https://docs.python.org/3/library/pathlib.html#pathlib.Path'\fI\%Path\fP\X'tty: link', \fI\%outfile\fP: \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link' | \X'tty: link https://docs.python.org/3/library/pathlib.html#pathlib.Path'\fI\%Path\fP\X'tty: link', \fI\%ffmpeg_func\fP: \X'tty: link https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable'\fI\%Callable\fP\X'tty: link'[[\X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link' | \X'tty: link https://docs.python.org/3/library/pathlib.html#pathlib.Path'\fI\%Path\fP\X'tty: link', \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link' | \X'tty: link https://docs.python.org/3/library/pathlib.html#pathlib.Path'\fI\%Path\fP\X'tty: link', \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link'], \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link'], \fI\%on_message\fP: \X'tty: link https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable'\fI\%Callable\fP\X'tty: link'[[\X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link', \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link', \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link', \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link'], \X'tty: link https://docs.python.org/3/library/constants.html#None'\fI\%None\fP\X'tty: link'] | \X'tty: link https://docs.python.org/3/library/constants.html#None'\fI\%None\fP\X'tty: link' = \fBNone\fP, \fI\%on_done\fP: \X'tty: link https://docs.python.org/3/library/collections.abc.html#collections.abc.Callable'\fI\%Callable\fP\X'tty: link'[[], \X'tty: link https://docs.python.org/3/library/constants.html#None'\fI\%None\fP\X'tty: link'] | \X'tty: link https://docs.python.org/3/library/constants.html#None'\fI\%None\fP\X'tty: link' = \fBNone\fP, \fI\%index\fP: \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link' = \fB0\fP, \fI\%wait_time\fP: \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link' = \fB1.0\fP, \fI\%initial_wait_time\fP: \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link' = \fB2.0\fP) -> \X'tty: link https://docs.python.org/3/library/constants.html#None'\fI\%None\fP\X'tty: link'
+Start the process.
+.sp
+Pass an input file path, an output file path, and a callable.
+.sp
+The callable \fB(signature: (in_file, outfile, vstats_file) \-> Any)\fP passed in is expected to
+start the ffmpeg process and pass the given stats path to the process (last argument):
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.EX
+ffmpeg \-y \-vstats_file ... \-i ...
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The on_message argument may be used to override the messaging, which by default writes to
+\fBsys.stdout\fP with basic information on the progress. It receives 4 arguments: percentage,
+frame count, total_frames, elapsed time in seconds (float).
+.sp
+If the FPS or the total number of frames cannot be calculated from
+the input file with ffprobe, an \fBFFMPEGProgressError\fP will be raised.
+.sp
+The \fBwait_time\fP (seconds) argument may be used to slow down the number of messages. A higher
+wait time will mean fewer messages. Very small values may not work.
+.sp
+The \fBinitial_wait_time\fP (seconds) argument may be used to set an initial interval to wait
+before processing the log file.
+.sp
+Only Linux is supported at this time.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.TP
+.B in_file : \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link' | Path
+Input file.
+.TP
+.B outfile : \X'tty: link https://docs.python.org/3/library/stdtypes.html#str'\fI\%str\fP\X'tty: link' | Path
+Output file.
+.TP
+.B ffmpeg_func : FFMPEGCallingFunction
+The function running ffmpeg.
+.TP
+.B on_message : OnMessageCallback | None
+The on\-message callback.
+.TP
+.B on_done : Callable[[], None] | None
+Completion callback.
+.TP
+.B index : \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link'
+Stream index.
+.TP
+.B wait_time : \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link'
+Wait time between messages. Seconds.
+.TP
+.B initial_wait_time : \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link'
+Wait time before processing log file. Seconds.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B ffmpeg_progress.utils.default_on_message(\fI\%percent\fP: \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link', \fI\%fr_cnt\fP: \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link', \fI\%total_frames\fP: \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link', \fI\%elapsed\fP: \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link') -> \X'tty: link https://docs.python.org/3/library/constants.html#None'\fI\%None\fP\X'tty: link'
+Write a simple progress report to standard output.
+.sp
+Default callback for \fBdisplay()\fP\&.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.TP
+.B percent : \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link'
+Percentage completed.
+.TP
+.B fr_cnt : \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link'
+Frame count.
+.TP
+.B total_frames : \X'tty: link https://docs.python.org/3/library/functions.html#int'\fI\%int\fP\X'tty: link'
+Total frame count.
+.TP
+.B elapsed : \X'tty: link https://docs.python.org/3/library/functions.html#float'\fI\%float\fP\X'tty: link'
+Elapsed time in seconds.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+Constants.
+.sp
+Exceptions.
+.INDENT 0.0
+.TP
+.B exception ffmpeg_progress.exceptions.FFMPEGProgressError
+General error.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception ffmpeg_progress.exceptions.InvalidFPS
+Raised when the FPS string is invalid.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception ffmpeg_progress.exceptions.InvalidPID
+Raised when the ffmpeg callback does not return a valid PID.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception ffmpeg_progress.exceptions.NoDuration
+Raised when duration cannot be determined.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception ffmpeg_progress.exceptions.ProbeFailed
+Raised when ffprobe fails.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception ffmpeg_progress.exceptions.TotalFramesLTEZero
+Raised when total frames is calculated to be less than or equal to zero.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception ffmpeg_progress.exceptions.UnexpectedZeroFPS
+Raised when the FPS is calculated to be zero.
+.UNINDENT
+.SH TYPING
+.INDENT 0.0
+.TP
+.B class ffmpeg_progress.types.ProbeDict
+Minimal representation of what ffprobe returns in its JSON output.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class ffmpeg_progress.types.ProbeFormatDict
+Used only to get the duration.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class ffmpeg_progress.types.ProbeStreamDict
+Used only to get the average frame rate string.
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Index\fP
+.IP \(bu 2
+\fI\%Module Index\fP
+.IP \(bu 2
+\fI\%Search Page\fP
+.UNINDENT
+.SH AUTHOR
+Andrew Udvare <audvare@gmail.com>
+.SH COPYRIGHT
+2025
+.\" Generated by docutils manpage writer.
+.

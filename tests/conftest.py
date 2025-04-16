@@ -1,4 +1,4 @@
-"""Configuration for Pytest."""  # noqa: INP001
+"""Configuration for Pytest."""
 from typing import NoReturn
 import os
 

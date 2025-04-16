@@ -4,7 +4,10 @@ __all__ = ('default_on_message',)
 
 
 def default_on_message(percent: float, fr_cnt: int, total_frames: int, elapsed: float) -> None:
-    """Default callback for ``display()``.
+    """
+    Write a simple progress report to standard output.
+
+    Default callback for ``display()``.
 
     Parameters
     ----------
@@ -21,7 +24,7 @@ def default_on_message(percent: float, fr_cnt: int, total_frames: int, elapsed: 
         Elapsed time in seconds.
     """
     bar_ = list('|' + (20 * ' ') + '|')
-    to_fill = int(round((fr_cnt / total_frames) * 20)) or 1
+    to_fill = round((fr_cnt / total_frames) * 20) or 1
     for x in range(1, to_fill):
         bar_[x] = '░'
     bar_[to_fill] = '░'

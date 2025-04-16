@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import mkstemp
 from time import sleep
@@ -27,7 +27,7 @@ __all__ = ('ffprobe', 'start')
 
 
 def ffprobe(in_file: Path | str) -> ProbeDict:
-    """ffprobe front-end.
+    """Ffprobe front-end.
 
     Parameters
     ----------
@@ -40,7 +40,7 @@ def ffprobe(in_file: Path | str) -> ProbeDict:
         Dictionary.
     """
     return cast(
-        ProbeDict,
+        'ProbeDict',
         json.loads(
             sp.check_output(
                 ('ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams',
@@ -54,8 +54,9 @@ def display(total_frames: int,
             on_message: OnMessageCallback | None = None,
             wait_time: float = 1.0) -> None:
     """
-    Generates messages for display of progress. Call on_message argument when
-    one is available.
+    Generate messages for display of progress.
+
+    Call ``on_message`` argument when one is available.
 
     Parameters
     ----------
@@ -74,7 +75,7 @@ def display(total_frames: int,
     wait_time : float
         Wait time between messages. Seconds.
     """
-    start_time = datetime.now(tz=UTC)
+    start_time = datetime.now(tz=timezone.utc)
     fr_cnt = 0
     elapsed = percent = 0.0
     if not on_message:
@@ -104,7 +105,7 @@ def display(total_frames: int,
         if vstats > fr_cnt:
             fr_cnt = vstats
             percent = 100 * (fr_cnt / total_frames)
-        elapsed = (datetime.now(tz=UTC) - start_time).total_seconds()
+        elapsed = (datetime.now(tz=timezone.utc) - start_time).total_seconds()
         on_message(percent, fr_cnt, total_frames, elapsed)
 
 
@@ -120,7 +121,7 @@ def start(in_file: str | Path,
           wait_time: float = 1.0,
           initial_wait_time: float = 2.0) -> None:
     """
-    The starting point.
+    Start the process.
 
     Pass an input file path, an output file path, and a callable.
 
@@ -179,7 +180,7 @@ def start(in_file: str | Path,
     except (IndexError, KeyError) as e:
         raise ProbeFailed from e
     try:
-        fps = cast(float, eval(probe['streams'][index]['avg_frame_rate']))  # noqa: PGH001
+        fps = cast('float', eval(probe['streams'][index]['avg_frame_rate']))  # noqa: S307
     except ZeroDivisionError as e:
         raise InvalidFPS from e
     if fps == 0:

@@ -1,4 +1,4 @@
-__all__ = ('OnMessageCallback', 'ProbeStreamDict', 'ProbeFormatDict', 'ProbeDict')
+__all__ = ('OnMessageCallback', 'ProbeDict', 'ProbeFormatDict', 'ProbeStreamDict')
 
 from collections.abc import Callable, Sequence
 from typing import TypedDict

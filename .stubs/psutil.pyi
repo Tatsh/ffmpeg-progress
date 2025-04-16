@@ -1,9 +1,0 @@
-STATUS_ZOMBIE: int = ...
-
-
-class Process:
-    def __init__(self, pid: int) -> None:
-        ...
-
-    def status(self) -> int:
-        ...
