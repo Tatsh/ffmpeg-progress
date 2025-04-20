@@ -3,11 +3,11 @@
 [![QA](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/qa.yml/badge.svg)](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/qa.yml)
 [![Tests](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/tests.yml/badge.svg)](https://github.com/Tatsh/ffmpeg-progress/actions/workflows/tests.yml)
 [![Coverage Status](https://coveralls.io/repos/github/Tatsh/ffmpeg-progress/badge.svg?branch=master)](https://coveralls.io/github/Tatsh/ffmpeg-progress?branch=master)
-[![Documentation Status](https://readthedocs.org/projects/ffmpeg-progress/badge/?version=latest)](https://ffmpeg-progress.readthedocs.io/en/latest/?badge=latest)
-![PyPI - Version](https://img.shields.io/pypi/v/ffmpeg-progress)
-![GitHub tag (with filter)](https://img.shields.io/github/v/tag/Tatsh/ffmpeg-progress)
-![GitHub](https://img.shields.io/github/license/Tatsh/ffmpeg-progress)
-![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/Tatsh/ffmpeg-progress/v0.0.4/master)
+[![Documentation Status](https://readthedocs.org/projects/ffmpeg-progress/badge/?version=latest)](https://ffmpeg-progress.readthedocs.org/?badge=latest)
+[![PyPI - Version](https://img.shields.io/pypi/v/ffmpeg-progress)](https://pypi.org/project/ffmpeg-progress/)
+[![GitHub tag (with filter)](https://img.shields.io/github/v/tag/Tatsh/ffmpeg-progress)](https://github.com/Tatsh/ffmpeg-progress/tags)
+[![License](https://img.shields.io/github/license/Tatsh/ffmpeg-progress)](https://github.com/Tatsh/ffmpeg-progress/blob/master/LICENSE.txt)
+[![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/Tatsh/ffmpeg-progress/v0.0.4/master)](https://github.com/Tatsh/ffmpeg-progress/compare/v0.0.4...master)
 
 Get progress information for an ffmpeg process.
 
@@ -15,11 +15,32 @@ This script is based on the work of [Rupert Plumridge](https://gist.github.com/p
 
 ## Installation
 
+### Poetry
+
+```shell
+poetry add ffmpeg-progress
+```
+
+### Pip
+
 ```shell
 pip install ffmpeg-progress
 ```
 
-## Basic use
+## Usage
+
+```plain
+Usage: ffmpeg-progress [OPTIONS] FILE
+
+  Entry point for shell use.
+
+Options:
+  -h, --help  Show this message and exit.
+```
+
+All unknown arguments passed to `ffmpeg-progress` are passed on to `ffmpeg`.
+
+## Library usage
 
 ```python
 import subprocess as sp
@@ -28,13 +49,13 @@ import sys
 from ffmpeg_progress import start
 
 
-def ffmpeg_callback(infile: str, outfile: str, vstats_path: str):
+def ffmpeg_callback(in_file: str, outfile: str, vstats_path: str):
     return sp.Popen(['ffmpeg',
                      '-nostats',
                      '-loglevel', '0',
                      '-y',
                      '-vstats_file', vstats_path,
-                     '-i', infile,
+                     '-i', in_file,
                       outfile]).pid
 
 

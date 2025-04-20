@@ -22,7 +22,6 @@ genindex
 globaltoc
 hoverxref
 htmlcov
-infile
 intersphinx
 isort
 jinja
