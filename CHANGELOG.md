@@ -9,24 +9,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Added
-
-- Item
-
-### Fixed
-
-- Item
-
-### Changed
-
-- Item
-
-### Removed
-
-- Item
-
 ## [0.0.1] - 2025-00-00
 
 First version.
 
-[unreleased]: https://github.com/Tatsh/mutt-oauth2/-/compare/v0.0.3...HEAD
+[unreleased]: https://github.com/Tatsh/mutt-oauth2/-/compare/v0.0.5...HEAD
