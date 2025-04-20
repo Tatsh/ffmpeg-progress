@@ -7,7 +7,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/ffmpeg-progress)](https://pypi.org/project/ffmpeg-progress/)
 [![GitHub tag (with filter)](https://img.shields.io/github/v/tag/Tatsh/ffmpeg-progress)](https://github.com/Tatsh/ffmpeg-progress/tags)
 [![License](https://img.shields.io/github/license/Tatsh/ffmpeg-progress)](https://github.com/Tatsh/ffmpeg-progress/blob/master/LICENSE.txt)
-[![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/Tatsh/ffmpeg-progress/v0.0.4/master)](https://github.com/Tatsh/ffmpeg-progress/compare/v0.0.4...master)
+[![GitHub commits since latest release (by SemVer including pre-releases)](https://img.shields.io/github/commits-since/Tatsh/ffmpeg-progress/v0.0.5/master)](https://github.com/Tatsh/ffmpeg-progress/compare/v0.0.5...master)
 
 Get progress information for an ffmpeg process.
 

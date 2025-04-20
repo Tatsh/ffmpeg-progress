@@ -7,7 +7,7 @@ local utils = import 'utils.libjsonnet';
   description: 'Get progress information for an ffmpeg process.',
   keywords: ['command line', 'ffmpeg'],
   project_name: 'ffmpeg-progress',
-  version: '0.0.4',
+  version: '0.0.5',
   want_main: true,
   citation+: {
     'date-released': '2025-04-16',
