@@ -1,4 +1,6 @@
 """Exceptions."""
+from __future__ import annotations
+
 __all__ = ('FFMPEGProgressError', 'InvalidFPS', 'InvalidPID', 'NoDuration', 'ProbeFailed',
            'TotalFramesLTEZero', 'UnexpectedZeroFPS')
 

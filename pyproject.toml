@@ -4,19 +4,20 @@ requires = ["poetry-core"]
 
 [project]
 classifiers = [
-  "Development Status :: 4 - Beta",
+  "Development Status :: 2 - Pre-Alpha",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python",
-  "Topic :: Multimedia :: Sound/Audio :: Conversion",
-  "Topic :: Multimedia :: Sound/Audio",
-  "Topic :: Multimedia :: Video :: Conversion",
-  "Topic :: Multimedia :: Video",
   "Typing :: Typed",
+  "Development Status :: 4 - Beta",
+  "Topic :: Multimedia :: Sound/Audio",
+  "Topic :: Multimedia :: Sound/Audio :: Conversion",
+  "Topic :: Multimedia :: Video",
+  "Topic :: Multimedia :: Video :: Conversion",
 ]
 description = "Get progress information for an ffmpeg process."
 dynamic = ["dependencies", "requires-python"]
@@ -59,12 +60,12 @@ version_provider = "pep621"
 
 [tool.coverage.report]
 exclude_also = ["if TYPE_CHECKING:"]
-omit = ["conftest.py", "tests.py", "tests/test_*.py", "__main__.py"]
+omit = ["__main__.py", "conftest.py", "ffmpeg_progress/types.py", "tests.py", "tests/test_*.py"]
 show_missing = true
 
 [tool.coverage.run]
 branch = true
-omit = ["conftest.py", "tests.py", "tests/test_*.py", "__main__.py"]
+omit = ["__main__.py", "conftest.py", "ffmpeg_progress/types.py", "tests.py", "tests/test_*.py"]
 
 [tool.djlint]
 max_line_length = 100
@@ -285,6 +286,7 @@ multiline-quotes = "double"
 case-sensitive = true
 combine-as-imports = true
 from-first = true
+required-imports = ["from __future__ import annotations"]
 
 [tool.ruff.lint.pep8-naming]
 extend-ignore-names = ["test_*"]

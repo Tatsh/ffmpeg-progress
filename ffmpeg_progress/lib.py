@@ -1,9 +1,11 @@
+from __future__ import annotations
+
 from collections.abc import Callable
 from datetime import datetime, timezone
 from pathlib import Path
 from tempfile import mkstemp
 from time import sleep
-from typing import cast
+from typing import TYPE_CHECKING, cast
 import json
 import os
 import re
@@ -20,8 +22,10 @@ from .exceptions import (
     TotalFramesLTEZero,
     UnexpectedZeroFPS,
 )
-from .types import OnMessageCallback, ProbeDict
 from .utils import default_on_message
+
+if TYPE_CHECKING:
+    from .types import OnMessageCallback, ProbeDict
 
 __all__ = ('ffprobe', 'start')
 
@@ -78,7 +82,8 @@ def display(total_frames: int,
     start_time = datetime.now(tz=timezone.utc)
     fr_cnt = 0
     elapsed = percent = 0.0
-    if not on_message:
+    len_linesep = len(LINESEP_BYTES)
+    if not on_message:  # pragma: no cover
         on_message = default_on_message
     while fr_cnt < total_frames and percent < PERCENT_100:
         sleep(wait_time)
@@ -90,14 +95,14 @@ def display(total_frames: int,
             break
         try:
             pos_end = os.lseek(vstats_fd, -2, os.SEEK_END)
-        except OSError:
+        except OSError:  # pragma: no cover
             continue  # Not enough data in file
         pos_start = None
-        while os.read(vstats_fd, 1) != LINESEP_BYTES:
+        while os.read(vstats_fd, len_linesep) != LINESEP_BYTES:
             pos_start = os.lseek(vstats_fd, -2, os.SEEK_CUR)
         if pos_start is None:
             continue
-        last = os.read(vstats_fd, pos_end - pos_start).decode('utf-8').strip()
+        last = os.read(vstats_fd, pos_end - pos_start).decode().strip()
         try:
             vstats = int(re.split(r'\s+', last)[5])
         except IndexError:
@@ -198,5 +203,5 @@ def start(in_file: str | Path,
     sleep(initial_wait_time)
     display(total_frames, vstats_fd, pid, wait_time=wait_time, on_message=on_message)
     os.close(vstats_fd)
-    if on_done:
+    if on_done:  # pragma: no cover
         on_done()

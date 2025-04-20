@@ -33,6 +33,7 @@ libjsonnet
 lseek
 modindex
 mypy
+nonexistent
 norecursedirs
 nostats
 numpy

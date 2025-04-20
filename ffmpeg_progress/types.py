@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = ('OnMessageCallback', 'ProbeDict', 'ProbeFormatDict', 'ProbeStreamDict')
 
 from collections.abc import Callable, Sequence

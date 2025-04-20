@@ -1,4 +1,6 @@
 """See https://www.sphinx-doc.org/en/master/usage/configuration.html."""
+from __future__ import annotations
+
 from datetime import datetime, timezone
 from operator import itemgetter
 from pathlib import Path
