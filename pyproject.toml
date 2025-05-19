@@ -107,7 +107,7 @@ commitizen = "^4.7.2"
 djlint = "^1.36.4"
 mypy = ">=1.12,<1.16"
 ruff = "^0.11.9"
-types-psutil = "^7.0.0.20250401"
+types-psutil = "^7.0.0.20250516"
 yapf = "^0.43.0"
 
 [tool.poetry.group.docs]
