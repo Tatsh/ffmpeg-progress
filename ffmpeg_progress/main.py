@@ -1,3 +1,4 @@
+"""Entry point."""
 from __future__ import annotations
 
 from pathlib import Path
@@ -23,7 +24,8 @@ __all__ = ('main',)
                 required=True)
 @click.pass_context
 def main(context: click.Context, file: Path) -> None:
-    """Entry point for shell use."""
+    """Entry point for shell use."""  # noqa: DOC501
+
     def ffmpeg(in_file: str | Path, outfile: str | Path,
                vstats_path: str) -> int:  # pragma: no cover
         return sp.Popen(('ffmpeg', '-nostats', '-loglevel', '0', '-y', '-vstats_file', vstats_path,

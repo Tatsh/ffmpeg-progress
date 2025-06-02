@@ -1,3 +1,4 @@
+"""ffmpeg-progress library."""
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -25,7 +26,7 @@ from .exceptions import (
 from .utils import default_on_message
 
 if TYPE_CHECKING:
-    from .types import OnMessageCallback, ProbeDict
+    from .typing import OnMessageCallback, ProbeDict
 
 __all__ = ('ffprobe', 'start')
 
@@ -156,27 +157,29 @@ def start(in_file: str | Path,
     ----------
     in_file : str | Path
         Input file.
-
     outfile : str | Path
         Output file.
-
     ffmpeg_func : FFMPEGCallingFunction
         The function running ffmpeg.
-
     on_message : OnMessageCallback | None
         The on-message callback.
-
     on_done : Callable[[], None] | None
         Completion callback.
-
     index : int
         Stream index.
-
     wait_time : float
         Wait time between messages. Seconds.
-
     initial_wait_time : float
         Wait time before processing log file. Seconds.
+
+    Raises
+    ------
+    ProbeFailed
+    InvalidFPS
+    UnexpectedZeroFPS
+    NoDuration
+    TotalFramesLTEZero
+    InvalidPID
     """
     in_file = Path(in_file)
     probe = ffprobe(in_file)
