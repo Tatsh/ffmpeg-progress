@@ -105,7 +105,7 @@ optional = true
 [tool.poetry.group.dev.dependencies]
 commitizen = "^4.7.2"
 djlint = "^1.36.4"
-mypy = ">=1.12,<1.16"
+mypy = ">=1.12,<1.17"
 ruff = "^0.11.10"
 types-psutil = "^7.0.0.20250516"
 yapf = "^0.43.0"
