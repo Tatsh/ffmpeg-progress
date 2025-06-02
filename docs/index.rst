@@ -8,31 +8,33 @@ Commands
   :prog: ffmpeg-progress
   :nested: full
 
-Library
--------
-.. automodule:: ffmpeg_progress.lib
-   :members:
+.. only:: html
 
-.. automodule:: ffmpeg_progress.utils
-   :members:
+   Library
+   -------
+   .. automodule:: ffmpeg_progress.lib
+      :members:
 
-
-
-.. automodule:: ffmpeg_progress.constants
-   :members:
-
-.. automodule:: ffmpeg_progress.exceptions
-   :members:
+   .. automodule:: ffmpeg_progress.utils
+      :members:
 
 
-Typing
-------
-.. automodule:: ffmpeg_progress.types
-   :members:
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   .. automodule:: ffmpeg_progress.constants
+      :members:
+
+   .. automodule:: ffmpeg_progress.exceptions
+      :members:
+
+
+   Typing
+   ------
+   .. automodule:: ffmpeg_progress.typing
+      :members:
+
+   .. toctree::
+      :maxdepth: 2
+      :caption: Contents:
 
 Indices and tables
 ==================
