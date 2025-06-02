@@ -1,11 +1,13 @@
 {
   "recommendations": [
+    "Grafana.vscode-jsonnet",
     "aaron-bond.better-comments",
     "bierner.markdown-checkbox",
     "buianhthang.xml2json",
     "christian-kohler.path-intellisense",
     "davidanson.vscode-markdownlint",
     "donjayamanne.githistory",
+    "donjayamanne.python-environment-manager",
     "dotjoshjohnson.xml",
     "eamodio.gitlens",
     "eeyore.yapf",
@@ -34,5 +36,6 @@
     "zainchen.json",
     "zengxingxin.sort-js-object-keys",
     "zeshuaro.vscode-python-poetry"
-  ]
+  ],
+  "unwantedRecommendations": ["ms-python.vscode-python-envs"]
 }

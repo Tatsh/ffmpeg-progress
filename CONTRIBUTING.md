@@ -1,3 +1,3 @@
-# How to contribute to mutt-oauth2
+# How to contribute to ffmpeg-progress
 
 To be written.

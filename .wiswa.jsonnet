@@ -31,7 +31,7 @@ local utils = import 'utils.libjsonnet';
         group+: {
           dev+: {
             dependencies+: {
-              'types-psutil': '^7.0.0.20250401',
+              'types-psutil': '^7.0.0.20250601',
             },
           },
         },

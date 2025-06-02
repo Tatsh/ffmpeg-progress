@@ -2,6 +2,7 @@ autodoc
 automodule
 bsky
 codeowners
+colorlog
 commitizen
 conftest
 coveragerc
@@ -11,7 +12,6 @@ debugpy
 djlint
 doctrees
 eeyore
-erdantic
 esbenp
 esbonio
 excinfo
@@ -30,6 +30,7 @@ jsonnet
 jsonschema
 lextudio
 libjsonnet
+linters
 lseek
 modindex
 mypy
@@ -50,7 +51,9 @@ pyproject
 pyright
 pytest
 regen
+rstcheck
 schemafile
+sdist
 sphinxcontrib
 tatsh
 testpaths
