@@ -1,7 +1,5 @@
 local utils = import 'utils.libjsonnet';
 
-local utils = import 'utils.libjsonnet';
-
 (import 'defaults.libjsonnet') + {
   // Project-specific
   description: 'Get progress information for an ffmpeg process.',
@@ -9,13 +7,12 @@ local utils = import 'utils.libjsonnet';
   project_name: 'ffmpeg-progress',
   version: '0.0.5',
   want_main: true,
-  citation+: {
-    'date-released': '2025-04-16',
+  copilot: {
+    intro: 'ffmpeg-progress is a command line utility and library to get progress information for a newly created ffmpeg process.',
   },
   pyproject+: {
     project+: {
       classifiers+: [
-        'Development Status :: 4 - Beta',
         'Topic :: Multimedia :: Sound/Audio',
         'Topic :: Multimedia :: Sound/Audio :: Conversion',
         'Topic :: Multimedia :: Video',
@@ -25,7 +22,6 @@ local utils = import 'utils.libjsonnet';
     tool+: {
       poetry+: {
         dependencies+: {
-          click: '^8.1.8',
           psutil: '^7.0.0',
         },
         group+: {
