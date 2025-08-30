@@ -13,4 +13,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 First version.
 
-[unreleased]: https://github.com/Tatsh/mutt-oauth2/-/compare/v0.0.5...HEAD
+[unreleased]: https://github.com/Tatsh/ffmpeg-progress/compare/v0.0.5...HEAD
+[0.0.1]: https://github.com/Tatsh/ffmpeg-progress/releases/tag/v0.0.1
