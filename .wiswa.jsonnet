@@ -1,13 +1,12 @@
 local utils = import 'utils.libjsonnet';
 
-(import 'defaults.libjsonnet') + {
-  // Project-specific
+{
   description: 'Get progress information for an ffmpeg process.',
   keywords: ['command line', 'ffmpeg'],
   project_name: 'ffmpeg-progress',
   version: '0.0.5',
   want_main: true,
-  copilot: {
+  copilot+: {
     intro: 'ffmpeg-progress is a command line utility and library to get progress information for a newly created ffmpeg process.',
   },
   pyproject+: {
@@ -20,36 +19,22 @@ local utils = import 'utils.libjsonnet';
       ],
     },
     tool+: {
+      coverage+: {
+        report+: { omit+: ['typing.py'] },
+        run+: { omit+: ['typing.py'] },
+      },
       poetry+: {
         dependencies+: {
-          psutil: '^7.0.0',
+          psutil: utils.latestPypiPackageVersionCaret('psutil'),
         },
         group+: {
           dev+: {
             dependencies+: {
-              'types-psutil': '^7.0.0.20250601',
+              'types-psutil': utils.latestPypiPackageVersionCaret('types-psutil'),
             },
           },
         },
       },
-    },
-  },
-  // Common
-  authors: [
-    {
-      'family-names': 'Udvare',
-      'given-names': 'Andrew',
-      email: 'audvare@gmail.com',
-      name: '%s %s' % [self['given-names'], self['family-names']],
-    },
-  ],
-  local funding_name = '%s2' % std.asciiLower(self.github_username),
-  github_username: 'Tatsh',
-  github+: {
-    funding+: {
-      ko_fi: funding_name,
-      liberapay: funding_name,
-      patreon: funding_name,
     },
   },
 }
