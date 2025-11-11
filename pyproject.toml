@@ -24,7 +24,7 @@ keywords = ["command line", "ffmpeg"]
 license = "MIT"
 name = "ffmpeg-progress"
 readme = "README.md"
-version = "0.0.5"
+version = "0.0.6"
 
 [[project.authors]]
 email = "audvare@gmail.com"
