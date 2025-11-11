@@ -21,6 +21,15 @@
 [![@Tatsh](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpublic.api.bsky.app%2Fxrpc%2Fapp.bsky.actor.getProfile%2F%3Factor%3Ddid%3Aplc%3Auq42idtvuccnmtl57nsucz72%26query%3D%24.followersCount%26style%3Dsocial%26logo%3Dbluesky%26label%3DFollow%2520%40Tatsh&query=%24.followersCount&style=social&logo=bluesky&label=Follow%20%40Tatsh)](https://bsky.app/profile/Tatsh.bsky.social)
 [![Mastodon Follow](https://img.shields.io/mastodon/follow/109370961877277568?domain=hostux.social&style=social)](https://hostux.social/@Tatsh)
 
+## Deprecated
+
+I am no longer maintaining this project. Please seek alternatives:
+
+- [ffmpeg-progress-yield](https://github.com/slhck/ffmpeg-progress-yield)
+- [better-ffmpeg-progress](https://github.com/CrypticSignal/better-ffmpeg-progress)
+
+## Overview
+
 Get progress information for an ffmpeg process.
 
 This script is based on the work of [Rupert Plumridge](https://gist.github.com/pruperting/397509/1068d4ced44ded986d0f52ddb4253cfee40921a7).
