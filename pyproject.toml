@@ -103,7 +103,7 @@ cz-path = "^0.0.4"
 djlint = "^1.36.4"
 mypy = "^1.18.2"
 ruff = "^0.14.4"
-types-psutil = "^7.0.0.20251001"
+types-psutil = "^7.0.0.20251111"
 yapf = "^0.43.0"
 
 [tool.poetry.group.docs]
