@@ -64,7 +64,7 @@
     }
   },
   "name": "ffmpeg-progress",
-  "packageManager": "yarn@4.10.3",
+  "packageManager": "yarn@4.11.0",
   "prettier": {
     "endOfLine": "lf",
     "iniSpaceAroundEquals": true,
