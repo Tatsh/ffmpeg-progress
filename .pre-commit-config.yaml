@@ -1,3 +1,11 @@
+ci:
+  skip:
+    - 'check-jsonschema'
+    - 'cspell'
+    - 'detect-aws-credentials'
+    - 'fix-formatting-markdown'
+    - 'fix-formatting-prettier'
+    - 'yarn-check-lock'
 default_install_hook_types:
   - 'pre-commit'
   - 'pre-push'
@@ -27,17 +35,21 @@ repos:
     repo: 'https://github.com/pre-commit/pre-commit-hooks'
     rev: 'v6.0.0'
   - hooks:
-      - id: 'poetry-check'
-        stages:
-          - 'pre-push'
-      - id: 'poetry-lock'
+      - id: 'uv-lock'
         stages:
           - 'pre-push'
       - args:
           - '--all-groups'
-        id: 'poetry-install'
-    repo: 'https://github.com/python-poetry/poetry'
-    rev: '2.2.1'
+          - '--frozen'
+        id: 'uv-sync'
+    repo: 'https://github.com/astral-sh/uv-pre-commit'
+    rev: '0.11.7'
+  - hooks:
+      - args:
+          - '--fix'
+        id: 'ruff-check'
+    repo: 'https://github.com/astral-sh/ruff-pre-commit'
+    rev: 'v0.15.12'
   - hooks:
       - id: 'yapf'
         name: 'check Python files are formatted'
@@ -53,7 +65,7 @@ repos:
         id: 'check-jsonschema'
         name: 'validate package.json'
     repo: 'https://github.com/python-jsonschema/check-jsonschema'
-    rev: '0.34.1'
+    rev: '0.37.1'
   - hooks:
       - id: 'validate-cff'
     repo: 'https://github.com/citation-file-format/cffconvert'
@@ -74,8 +86,8 @@ repos:
         stages:
           - 'post-checkout'
           - 'post-merge'
-      - entry: 'yarn prettier -w'
-        exclude: '((requirements|robots).txt|Dockerfile.*|..*ignore|.(coveragerc|gitattributes)|.*.(csv|lock|resource|robot)|CODEOWNERS|py.typed)$'
+      - entry: 'yarn exec prettier --write'
+        exclude: "((requirements|robots).txt|Dockerfile.*|..*ignore|.(coveragerc|gitattributes)|.*.(csv|lock|resource|robot)|pylock.*\\.toml|CODEOWNERS|py.typed)$"
         exclude_types:
           - 'binary'
           - 'dockerfile'
@@ -87,24 +99,14 @@ repos:
         id: 'fix-formatting-prettier'
         language: 'system'
         name: 'check files are formatted with Prettier'
-      - entry: 'poetry run ruff check --fix --exit-non-zero-on-fix'
-        id: 'fix-ruff'
-        language: 'system'
-        name: 'check Python files have Ruff fixes applied'
-        require_serial: true
-        types_or:
-          - 'python'
-          - 'pyi'
-      - entry: "yarn markdownlint-cli2 --fix '#node_modules'"
+      - entry: 'yarn markdownlint-cli2 --config package.json --configPointer /markdownlint-cli2 --fix'
         id: 'fix-formatting-markdown'
         language: 'system'
         name: 'check Markdown files are formatted'
         types_or:
           - 'markdown'
-      - entry: 'yarn check-spelling --no-must-find-files --no-summary'
-        id: 'cspell'
-        language: 'node'
-        name: 'check spelling'
-        types:
-          - 'text'
     repo: 'local'
+  - hooks:
+      - id: 'cspell'
+    repo: 'https://github.com/streetsidesoftware/cspell-cli'
+    rev: 'v10.0.0'

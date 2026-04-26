@@ -1,42 +1,93 @@
 jobs:
-  build:
+  format:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: 'actions/checkout@v6'
-      - name: 'Install Poetry'
-        run: 'pipx install poetry'
-      - name: 'Set up Python ${{ matrix.python-version }}'
-        uses: 'actions/setup-python@v6'
+      - uses: 'actions/checkout@v6.0.2'
+      - name: 'Install uv'
+        uses: 'astral-sh/setup-uv@v8.1.0'
+      - name: 'Set up Python'
+        uses: 'actions/setup-python@v6.2.0'
         with:
-          cache: 'poetry'
-          python-version: '${{ matrix.python-version }}'
-      - name: 'Install dependencies (Poetry)'
-        run: 'poetry install --with=dev,tests'
+          python-version: '3.10'
+      - name: 'Install dependencies (uv)'
+        run: 'uv sync --group dev --all-extras'
+      - name: 'Check formatting (YAPF)'
+        run: 'uv run yapf --diff --parallel --recursive .'
+  mypy:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v6.0.2'
+      - name: 'Install uv'
+        uses: 'astral-sh/setup-uv@v8.1.0'
+      - name: 'Set up Python'
+        uses: 'actions/setup-python@v6.2.0'
+        with:
+          python-version: '3.14'
+      - name: 'Install dependencies (uv)'
+        run: 'uv sync --group dev --group tests --all-extras'
+      - name: 'Lint with mypy'
+        run: 'uv run mypy .'
+  pyright:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v6.0.2'
+      - name: 'Install uv'
+        uses: 'astral-sh/setup-uv@v8.1.0'
+      - name: 'Set up Python'
+        uses: 'actions/setup-python@v6.2.0'
+        with:
+          python-version: '3.14'
+      - name: 'Install dependencies (uv)'
+        run: 'uv sync --group dev --group tests --all-extras'
+      - name: 'Yarn cache'
+        uses: 'actions/cache@v5.0.5'
+        with:
+          key: "${{ runner.os }}-yarn-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}"
+          path: '~/.yarn/berry'
+          restore-keys: '${{ runner.os }}-yarn'
       - name: 'Install dependencies (Yarn)'
         run: 'yarn'
-      - name: 'Lint with mypy'
-        run: 'yarn mypy .'
+      - name: 'Lint with Pyright'
+        run: 'yarn pyright'
+  ruff:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v6.0.2'
       - name: 'Lint with Ruff'
-        run: 'yarn ruff .'
-      - name: 'Check formatting'
-        run: 'yarn check-formatting'
-      - name: 'Check spelling'
-        run: 'yarn check-spelling'
-    strategy:
-      matrix:
-        python-version:
-          - '3.10'
-          - '3.11'
-          - '3.12'
-          - '3.13'
-          - '3.14'
+        uses: 'astral-sh/ruff-action@v4.0.0'
+  ty:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: 'actions/checkout@v6.0.2'
+      - name: 'Install uv'
+        uses: 'astral-sh/setup-uv@v8.1.0'
+      - name: 'Set up Python'
+        uses: 'actions/setup-python@v6.2.0'
+        with:
+          python-version: '3.14'
+      - name: 'Install dependencies (uv)'
+        run: 'uv sync --group dev --group tests --all-extras'
+      - name: 'Lint with ty'
+        run: 'uv run ty check'
 name: 'QA'
 'on':
   pull_request:
     branches:
       - 'master'
+    paths:
+      - '**/*.py'
+      - '**/*.pyi'
+      - '.github/workflows/qa.yml'
+      - 'pyproject.toml'
+      - 'tests/pyproject.toml'
   push:
     branches:
       - 'master'
+    paths:
+      - '**/*.py'
+      - '**/*.pyi'
+      - '.github/workflows/qa.yml'
+      - 'pyproject.toml'
+      - 'tests/pyproject.toml'
 permissions:
   contents: 'read'

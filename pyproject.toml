@@ -1,6 +1,36 @@
 [build-system]
-build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core"]
+build-backend = "hatchling.build"
+requires = ["hatchling"]
+
+[dependency-groups]
+dev = [
+  "commitizen>=4.13.10",
+  "cz-path>=0.0.6",
+  "mypy>=1.20.1",
+  "ruff==0.15.11",
+  "ty>=0.0.31",
+  "types-psutil>=7.2.2.20260408",
+  "yapf>=0.43.0",
+]
+docs = [
+  "autodoc-pydantic>=2.2.0",
+  "doc8>=2.0.0",
+  "enum-tools[sphinx]>=0.13.0",
+  "esbonio>=2.0.0",
+  "restructuredtext-lint>=2.0.2",
+  "sphinx-click>=6.2.0",
+  "sphinx-datatables>=1.0.0",
+  "sphinx-immaterial>=0.13.9",
+  "sphinx>=9.1.0; python_version >= \"3.13\"",
+  "tomlkit>=0.14.0",
+]
+tests = [
+  "coveralls>=4.1.0",
+  "mock>=5.2.0",
+  "pytest-cov>=7.1.0",
+  "pytest-mock>=3.15.1",
+  "pytest>=9.0.3",
+]
 
 [project]
 classifiers = [
@@ -18,17 +48,18 @@ classifiers = [
   "Topic :: Multimedia :: Video",
   "Topic :: Multimedia :: Video :: Conversion",
 ]
+dependencies = ["bascom>=0.1.2", "click>=8.3.2", "psutil>=7.2.2", "typing-extensions>=4.15.0"]
 description = "Get progress information for an ffmpeg process."
-dynamic = ["dependencies", "requires-python"]
 keywords = ["command line", "ffmpeg"]
 license = "MIT"
 name = "ffmpeg-progress"
 readme = "README.md"
+requires-python = ">=3.10,<4.0"
 version = "0.0.6"
 
 [[project.authors]]
-email = "audvare@gmail.com"
-name = "Andrew Udvare"
+email = "not-filled-in@email.com"
+name = "Filled In Not"
 
 [project.scripts]
 ffmpeg-progress = "ffmpeg_progress.main:main"
@@ -47,32 +78,46 @@ version_files = [
   ".wiswa.jsonnet",
   "CITATION.cff",
   "README.md",
+  "docs/badges.rst",
   "docs/index.rst",
   "ffmpeg_progress/__init__.py",
   "man/ffmpeg-progress.1",
   "package.json",
+  "snapcraft.yaml",
 ]
 version_provider = "pep621"
 
 [tool.coverage.report]
 exclude_also = ["if TYPE_CHECKING:"]
-omit = ["__main__.py", "conftest.py", "tests.py", "tests/test_*.py", "typing.py"]
+omit = [
+  "conftest.py",
+  "ffmpeg_progress/__main__.py",
+  "tests.py",
+  "tests/*/test_*.py",
+  "tests/test_*.py",
+  "typing.py",
+]
 show_missing = true
 
 [tool.coverage.run]
 branch = true
-omit = ["__main__.py", "conftest.py", "tests.py", "tests/test_*.py", "typing.py"]
-
-[tool.djlint]
-max_line_length = 100
-no_line_after_yaml = true
-preserve_blank_lines = true
-preserve_leading_space = true
-profile = "jinja"
-use_gitignore = true
+omit = [
+  "conftest.py",
+  "ffmpeg_progress/__main__.py",
+  "tests.py",
+  "tests/*/test_*.py",
+  "tests/test_*.py",
+  "typing.py",
+]
 
 [tool.doc8]
 max-line-length = 100
+
+[tool.hatch.build.targets.sdist]
+include = ["ffmpeg_progress", "man", "tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["ffmpeg_progress"]
 
 [tool.mypy]
 cache_dir = "~/.cache/mypy"
@@ -84,75 +129,10 @@ strict = true
 strict_optional = true
 warn_unreachable = true
 
-[tool.poetry]
-include = ["man", { format = "sdist", path = "tests" }]
-
-[tool.poetry.dependencies]
-bascom = "^0.0.4"
-click = "^8.3.0"
-psutil = "^7.1.3"
-python = ">=3.10,<4.0"
-typing-extensions = "^4.15.0"
-
-[tool.poetry.group.dev]
-optional = true
-
-[tool.poetry.group.dev.dependencies]
-commitizen = "^4.10.0"
-cz-path = "^0.0.4"
-djlint = "^1.36.4"
-mypy = "^1.18.2"
-ruff = "^0.14.4"
-types-psutil = "^7.0.0.20251111"
-yapf = "^0.43.0"
-
-[tool.poetry.group.docs]
-optional = true
-
-[tool.poetry.group.docs.dependencies]
-autodoc-pydantic = "^2.2.0"
-doc8 = "^2.0.0"
-docutils = "<0.22"
-esbonio = "^1.0.0"
-numpydoc = "^1.9.0"
-restructuredtext-lint = "^1.4.0"
-sphinx-click = "^6.1.0"
-sphinx-datatables = "^0.3.1"
-sphinx-hoverxref = "^1.4.2"
-sphinx-immaterial = "^0.13.8"
-tomlkit = "^0.13.3"
-
-[tool.poetry.group.docs.dependencies.enum-tools]
-extras = ["sphinx"]
-version = "^0.13.0"
-
-[[tool.poetry.group.docs.dependencies.sphinx]]
-python = ">=3.11"
-version = "^8.2.3"
-
-[[tool.poetry.group.docs.dependencies.sphinx]]
-python = "<3.11"
-version = "^7.2.5"
-
-[tool.poetry.group.tests]
-optional = true
-
-[tool.poetry.group.tests.dependencies]
-mock = "^5.2.0"
-pytest = "^9.0.0"
-pytest-cov = "^7.0.0"
-pytest-mock = "^3.15.1"
-
-[tool.poetry.group.tests.dependencies.coveralls]
-python = "<3.13"
-version = "^4.0.1"
-
-[[tool.poetry.packages]]
-include = "ffmpeg_progress"
-
 [tool.pyright]
 deprecateTypingAliases = true
 enableExperimentalFeatures = true
+exclude = [".venv", "**/node_modules", "**/__pycache__", "**/.*"]
 include = ["./ffmpeg_progress", "./tests"]
 pythonPlatform = "Linux"
 pythonVersion = "3.10"
@@ -161,10 +141,10 @@ reportImplicitOverride = "warning"
 reportImportCycles = "error"
 reportMissingModuleSource = "error"
 reportPropertyTypeMismatch = "error"
-reportShadowedImports = "error"
 reportUnnecessaryTypeIgnoreComment = "none"
 typeCheckingMode = "off"
-useLibraryCodeForTypes = false
+venv = ".venv"
+venvPath = "."
 
 [tool.pytest.ini_options]
 mock_use_standalone_module = true
@@ -188,23 +168,7 @@ quote-style = "single"
 
 [tool.ruff.lint]
 extend-select = ["ALL"]
-ignore = [
-  "ANN401",
-  "COM812",
-  "CPY001",
-  "D201",
-  "D203",
-  "D204",
-  "D212",
-  "DOC201",
-  "N818",
-  "S101",
-  "S404",
-  "S603",
-  "TD002",
-  "UP046",
-  "UP047",
-]
+ignore = ["ANN401", "COM812", "CPY001", "D203", "D204", "D212", "N818", "S404", "S603", "TD002"]
 preview = true
 
 [tool.ruff.lint.flake8-builtins]
@@ -228,7 +192,7 @@ max-complexity = 20
 extend-ignore-names = ["test_*"]
 
 [tool.ruff.lint.per-file-ignores]
-"main.py" = ["PLR0913"]
+"ffmpeg_progress/main.py" = ["PLR0913"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"
@@ -241,6 +205,10 @@ max-positional-args = 15
 max-public-methods = 30
 max-returns = 10
 max-statements = 100
+
+[tool.uv]
+default-groups = "all"
+exclude-newer = "1 week"
 
 [tool.yapf]
 align_closing_bracket_with_visual_indent = true
@@ -289,4 +257,4 @@ split_penalty_logical_operator = 300
 use_tabs = false
 
 [tool.yapfignore]
-ignore_patterns = [".venv/**", "node_modules/**"]
+ignore_patterns = [".venv", ".wiswa-ci", "node_modules"]

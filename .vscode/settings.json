@@ -28,6 +28,9 @@
   "editor.rulers": [100],
   "editor.tabSize": 2,
   "editor.wordWrapColumn": 100,
+  "files.associations": {
+    "*.json.dist": "json"
+  },
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
@@ -55,5 +58,6 @@
   "restructuredtext.linter.run": "onSave",
   "shellformat.flag": "i 2 -ci -sr",
   "sortJSON.excludedFiles": [],
-  "sortJSON.excludedPaths": []
+  "sortJSON.excludedPaths": [],
+  "yaml.format.printWidth": 100
 }

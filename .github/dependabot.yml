@@ -1,14 +1,32 @@
 updates:
-  - directory: '/'
+  - cooldown:
+      default-days: 7
+    directory: '/'
+    groups:
+      development:
+        dependency-type: 'development'
+      production:
+        dependency-type: 'production'
     package-ecosystem: 'npm'
     schedule:
       interval: 'weekly'
   - directory: '/'
+    groups:
+      github-actions:
+        patterns:
+          - '*'
     package-ecosystem: 'github-actions'
     schedule:
       interval: 'weekly'
-  - directory: '/'
-    package-ecosystem: 'pip'
+  - cooldown:
+      default-days: 7
+    directory: '/'
+    groups:
+      development:
+        dependency-type: 'development'
+      production:
+        dependency-type: 'production'
+    package-ecosystem: 'uv'
     schedule:
       interval: 'weekly'
 version: 2

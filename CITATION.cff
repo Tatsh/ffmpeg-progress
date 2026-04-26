@@ -1,8 +1,8 @@
 authors:
-  - family-names: 'Udvare'
-    given-names: 'Andrew'
+  - family-names: 'Not'
+    given-names: 'Filled In'
 cff-version: '1.2.0'
-date-released: '2025-11-11'
+date-released: '2026-04-25'
 message: 'If you use this software, please cite it as below.'
 title: 'ffmpeg-progress'
 version: '0.0.6'

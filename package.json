@@ -1,5 +1,5 @@
 {
-  "contributors": ["Andrew Udvare <audvare@gmail.com>"],
+  "contributors": ["Filled In Not <not-filled-in@email.com>"],
   "cspell": {
     "cache": {
       "useCache": true
@@ -14,7 +14,7 @@
       "*": true
     },
     "enableGlobDot": true,
-    "files": ["*"],
+    "files": ["**"],
     "ignorePaths": [
       "*.1",
       "*.har",
@@ -37,14 +37,13 @@
   "description": "Get progress information for an ffmpeg process.",
   "devDependencies": {
     "@prettier/plugin-xml": "^3.4.2",
-    "cspell": "^9.4.0",
-    "markdownlint-cli2": "^0.20.0",
-    "prettier": "^3.7.4",
+    "cspell": "^9.8.0",
+    "markdownlint-cli2": "^0.22.0",
+    "prettier": "^3.8.3",
     "prettier-plugin-ini": "^1.3.0",
-    "prettier-plugin-sort-json": "^4.1.1",
+    "prettier-plugin-sort-json": "^4.2.0",
     "prettier-plugin-toml": "^2.0.6",
-    "pyright": "^1.1.407",
-    "yarn-audit-fix": "^10.1.1"
+    "pyright": "^1.1.409"
   },
   "files": ["LICENSE.txt", "README.md", "man/ffmpeg-progress.1"],
   "homepage": "https://tatsh.github.io/ffmpeg-progress/",
@@ -52,6 +51,9 @@
   "license": "MIT",
   "markdownlint-cli2": {
     "config": {
+      "MD024": {
+        "siblings_only": true
+      },
       "MD033": {
         "allowed_elements": ["kbd"]
       },
@@ -61,17 +63,21 @@
         "line_length": 100,
         "tables": false
       }
-    }
+    },
+    "gitignore": true,
+    "globs": ["**/*.md", "**/*.mdc"],
+    "noBanner": true,
+    "showFound": true
   },
   "name": "ffmpeg-progress",
-  "packageManager": "yarn@4.11.0",
+  "packageManager": "yarn@4.14.1",
   "prettier": {
     "endOfLine": "lf",
     "iniSpaceAroundEquals": true,
     "jsonRecursiveSort": true,
     "overrides": [
       {
-        "files": ["package.json"],
+        "files": ["*.json.dist", "package.json"],
         "options": {
           "parser": "json"
         }
@@ -92,18 +98,20 @@
     "url": "git@github.com:Tatsh/ffmpeg-progress.git"
   },
   "scripts": {
-    "check-formatting": "yarn prettier -c . && poetry run yapf -prd . && yarn markdownlint-cli2 '**/*.md' '#node_modules'",
-    "check-spelling": "yarn cspell --no-progress './**/*'  './**/.*'",
-    "format": "prettier -w . && poetry run yapf -ri . && yarn markdownlint-cli2 --fix '**/*.md' '#node_modules'",
-    "gen-docs": "poetry run sphinx-build -T -E -b html -d docs/_build/doctrees -D language=en docs docs/_build/html",
-    "gen-manpage": "poetry run sphinx-build -T -E -b man -d docs/_build/doctrees -D language=en docs man",
-    "mypy": "poetry run mypy",
-    "qa": "yarn mypy . && yarn ruff . && yarn check-spelling && yarn check-formatting",
-    "regen": "poetry run wiswa",
-    "ruff": "poetry run ruff check",
-    "ruff:fix": "poetry run ruff check --fix",
-    "test": "poetry run pytest",
-    "test:cov": "yarn test --cov . --cov-report html --cov-report term-missing:skip-covered"
+    "check-formatting": "prettier --check . && uv run yapf --diff --parallel --recursive . && markdownlint-cli2 --config package.json --configPointer /markdownlint-cli2",
+    "check-spelling": "cspell --no-progress",
+    "dict:update": "rm -f .vscode/dictionary.txt && cspell lint --no-progress --no-summary --unique --words-only | tr '[:upper:]' '[:lower:]' | sort -u > .vscode/dictionary.txt",
+    "format": "prettier --write . && uv run yapf --in-place --parallel --recursive . && markdownlint-cli2 --config package.json --configPointer /markdownlint-cli2 --fix",
+    "gen-docs": "uv run sphinx-build --fresh-env --fail-on-warning --builder html --doctree-dir docs/_build/doctrees --define language=en docs docs/_build/html",
+    "gen-manpage": "uv run sphinx-build --fresh-env --fail-on-warning --builder man --doctree-dir docs/_build/doctrees --define language=en docs man",
+    "mypy": "uv run mypy",
+    "qa": "yarn mypy . && yarn pyright && uv run ty check && yarn ruff . && yarn check-spelling && yarn check-formatting",
+    "regen": "uv run wiswa",
+    "ruff": "uv run ruff check",
+    "ruff:fix": "uv run ruff check --fix",
+    "test": "uv run pytest",
+    "test:cov": "yarn test --cov . --cov-branch --cov-report html --cov-report term-missing:skip-covered",
+    "ty": "uv run ty check"
   },
   "version": "0.0.6"
 }
