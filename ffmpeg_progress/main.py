@@ -28,8 +28,9 @@ def main(context: click.Context, file: Path) -> None:
 
     def ffmpeg(in_file: str | Path, outfile: str | Path,
                vstats_path: str) -> int:  # pragma: no cover
-        return sp.Popen(('ffmpeg', '-nostats', '-loglevel', '0', '-y', '-vstats_file', vstats_path,
-                         '-i', in_file, *context.args[2:], outfile)).pid
+        return sp.Popen((  # noqa: S607
+            'ffmpeg', '-nostats', '-loglevel', '0', '-y', '-vstats_file', vstats_path, '-i',
+            in_file, *context.args[2:], outfile)).pid
 
     with TemporaryFile('wb', prefix=file.stem, suffix=file.suffix) as tf:
         outfile = tf.name

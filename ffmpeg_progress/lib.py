@@ -48,8 +48,9 @@ def ffprobe(in_file: Path | str) -> ProbeDict:
         'ProbeDict',
         json.loads(
             sp.check_output(
-                ('ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format', '-show_streams',
-                 str(in_file)),
+                (  # noqa: S607
+                    'ffprobe', '-v', 'quiet', '-print_format', 'json', '-show_format',
+                    '-show_streams', str(in_file)),
                 encoding='utf-8')))
 
 
