@@ -25,16 +25,18 @@ changed, skip the click-auditor).
 ### When Python code is being committed
 
 If any changed files are under `ffmpeg_progress/` or `tests/`, run the following
-agents **in order**:
+agents in parallel, having each agent report back with a list of suggested changes. After all agents
+have completed, review their suggestions and apply them as appropriate. Then run the **qa-fixer**
+agent to format and fix any lint/spelling issues. Finally, run `yarn test:cov` to verify no
+regressions.
 
 1. **python-moderniser** - upgrade to modern Python features.
-1. **click-auditor** - validate Click command consistency. **Only run if files under
-   `ffmpeg_progress/commands/` changed.**
+1. **click-auditor** - validate Click command consistency. **Only run if the project directly uses
+   Click and files under `ffmpeg_progress/commands/` changed.**
 1. **docstring-fixer** - fix missing or incomplete docstrings.
 1. **copy-editor** - fix prose in comments, docstrings, and strings.
 1. **test-writer** - generate/update tests for new/changed code. **Skip if the only changes are in
    `tests/`.**
-1. **qa-fixer** - format and fix lint/spelling issues.
 
 ### When user-facing changes are being committed
 
@@ -78,8 +80,6 @@ If `CHANGELOG.md` is the only file being committed, use the `changelog:` prefix.
 - A refactor and a bug fix in the same file should be separate commits.
 - New tests for existing code should be separate from the code changes they test only if the code
   changes are themselves separate.
-- Dictionary updates (`.vscode/dictionary.txt`) should be committed first with message
-  `dictionary: update`.
 
 ### Cruft updates
 

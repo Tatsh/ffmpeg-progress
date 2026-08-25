@@ -5,6 +5,9 @@ from typing import TYPE_CHECKING
 import os
 import subprocess as sp
 
+import psutil
+import pytest
+
 from ffmpeg_progress.constants import LINESEP_BYTES
 from ffmpeg_progress.exceptions import (
     InvalidFPS,
@@ -15,8 +18,6 @@ from ffmpeg_progress.exceptions import (
     UnexpectedZeroFPS,
 )
 from ffmpeg_progress.lib import display, ffprobe, start
-import psutil
-import pytest
 
 if TYPE_CHECKING:
     from pytest_mock import MockerFixture

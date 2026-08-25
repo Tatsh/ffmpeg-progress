@@ -1,5 +1,10 @@
 {
-  "contributors": ["Filled In Not <not-filled-in@email.com>"],
+  "_wiswa": {
+    "commandLine": "wiswa -d",
+    "lastRun": "2026-08-25T22:58:14Z",
+    "version": "a222760"
+  },
+  "contributors": ["Andrew Udvare <audvare@gmail.com>"],
   "cspell": {
     "cache": {
       "useCache": true
@@ -70,7 +75,7 @@
     "showFound": true
   },
   "name": "ffmpeg-progress",
-  "packageManager": "yarn@4.14.1",
+  "packageManager": "yarn@4.18.0",
   "prettier": {
     "endOfLine": "lf",
     "iniSpaceAroundEquals": true,
@@ -95,7 +100,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Tatsh/ffmpeg-progress.git"
+    "url": "git+https://github.com/Tatsh/ffmpeg-progress.git"
   },
   "scripts": {
     "check-formatting": "prettier --check . && uv run yapf --diff --parallel --recursive . && markdownlint-cli2 --config package.json --configPointer /markdownlint-cli2",

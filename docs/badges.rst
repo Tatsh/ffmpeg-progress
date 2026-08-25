@@ -68,10 +68,18 @@
       :target: https://github.com/Tatsh/ffmpeg-progress/stargazers
       :alt: Stargazers
 
-   .. image:: https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit
-      :target: https://github.com/pre-commit/pre-commit
-      :alt: pre-commit
+   .. image:: https://results.pre-commit.ci/badge/github/Tatsh/ffmpeg-progress/master.svg
+      :target: https://results.pre-commit.ci/latest/github/Tatsh/ffmpeg-progress/master
+      :alt: pre-commit.ci status
 
    .. image:: https://img.shields.io/badge/Prettier-black?logo=prettier
       :target: https://prettier.io/
       :alt: Prettier
+
+   .. image:: https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fpublic.api.bsky.app%2Fxrpc%2Fapp.bsky.actor.getProfile%2F%3Factor%3Ddid%3Aplc%3Auq42idtvuccnmtl57nsucz72%26query%3D%24.followersCount%26style%3Dsocial%26logo%3Dbluesky%26label%3DFollow%2520%40Tatsh&query=%24.followersCount&style=social&logo=bluesky&label=Follow%20%40Tatsh
+      :target: https://bsky.app/profile/Tatsh.bsky.social
+      :alt: Follow @Tatsh
+
+   .. image:: https://img.shields.io/mastodon/follow/109370961877277568?domain=hostux.social&style=social
+      :target: https://hostux.social/@Tatsh
+      :alt: Mastodon Follow

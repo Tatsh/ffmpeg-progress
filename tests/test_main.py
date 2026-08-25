@@ -3,9 +3,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+import pytest
+
 from ffmpeg_progress.exceptions import FFMPEGProgressError
 from ffmpeg_progress.main import main
-import pytest
 
 if TYPE_CHECKING:
     from click.testing import CliRunner
